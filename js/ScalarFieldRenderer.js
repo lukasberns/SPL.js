@@ -28,6 +28,13 @@ ScalarFieldRenderer.prototype.colorPalette = {
 	1.00: "red"
 };
 ScalarFieldRenderer.prototype.colorPalette = { 0: 'yellow', 1: 'red' };
+ScalarFieldRenderer.prototype.colorPalette = {
+	0.00: 'blue',
+	0.25: 'cyan',
+	0.50: 'lime',
+	0.75: 'yellow',
+	1.00: 'red'
+};
 
 /**
  * Render field in canvas
