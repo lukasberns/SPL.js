@@ -38,9 +38,10 @@ ScalarFieldRenderer.prototype.colorPalette = {
 
 /**
  * Render field in canvas
+ * @param float forcedMaxLevel Optional. Force max level to this value
  * @return void
  */
-ScalarFieldRenderer.prototype.render = function() {
+ScalarFieldRenderer.prototype.render = function(forcedMaxLevel) {
 	var width = +this.canvas.width;
 	var height = +this.canvas.height;
 	var ctx = this.getContext();
@@ -57,12 +58,15 @@ ScalarFieldRenderer.prototype.render = function() {
 		for (x = 0; x < width; x++) {
 			fieldLevel = this.fieldFunction(x, y);
 			absoluteFieldLevels[y][x] = fieldLevel;
-			if (fieldLevel > maxFieldLevel) {
+			if (fieldLevel != Infinity && fieldLevel > maxFieldLevel) {
 				maxFieldLevel = fieldLevel;
 			}
 		}
 	}
 	
+	if (forcedMaxLevel) {
+		maxFieldLevel = forcedMaxLevel;
+	}
 	if (!maxFieldLevel) {
 		maxFieldLevel = 1;
 	}
@@ -77,6 +81,12 @@ ScalarFieldRenderer.prototype.render = function() {
 		for (x = 0; x < width; x++) {
 			fieldLevel = absoluteFieldLevels[y][x];
 			var paletteOffset = 4 * Math.round(fieldLevel * scaleFactor);
+			if (paletteOffset < 0) {
+				paletteOffset = 0;
+			}
+			if (paletteOffset > 1020) {
+				paletteOffset = 1020;
+			}
 			
 			pixelArray[offset++] = colorPalette[paletteOffset + 0];
 			pixelArray[offset++] = colorPalette[paletteOffset + 1];
